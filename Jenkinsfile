@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'sentiment-ai'
-        REGISTRY = 'ghcr.io/DavidoSF' // remplacez VOTRE_PSEUDO
+        REGISTRY = 'ghcr.io/davidosf'
         // IMAGE_TAG = SHA Git court du commit (ex: a3f8c12)
         // Chaque build produit une image taguée de façon unique et traçable
         IMAGE_TAG = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
@@ -14,6 +14,7 @@ pipeline {
             steps {
                 checkout scm
                 echo "Branche : ${env.BRANCH_NAME}"
+                echo "Git branch : ${env.GIT_BRANCH}"
                 echo "Commit: ${env.GIT_COMMIT}"
                 sh 'git log --oneline -5'
             }
@@ -52,7 +53,6 @@ pipeline {
         }
 
         stage('Push') {
-            when { branch 'main' }
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'github-token',
