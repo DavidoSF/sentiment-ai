@@ -71,6 +71,7 @@ pipeline {
                 set -e
                 # Copier coverage .xml depuis le conteneur vers le workspace
                 docker cp test-runner:/tmp/coverage.xml ./coverage.xml 2>/dev/null || true
+                sed -i "s#/app/src#${WORKSPACE}/src#g" coverage.xml 2>/dev/null || true
                 docker rm -f test-runner 2>/dev/null || true
                 # Retourner le code de sortie des tests
                 exit $TEST_EXIT_CODE
