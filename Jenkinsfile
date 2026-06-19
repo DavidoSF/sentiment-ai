@@ -59,7 +59,7 @@ pipeline {
                 docker rm -f test-runner 2>/dev/null || true
                 set +e
                 docker run \
-                -e CI= true \
+                -e CI=true \
                 --name test-runner \
                 ${IMAGE_NAME}:${IMAGE_TAG} \
                 pytest tests/ -v \
