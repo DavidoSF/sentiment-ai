@@ -71,7 +71,6 @@ pipeline {
                 set -e
                 # Copier coverage .xml depuis le conteneur vers le workspace
                 docker cp test-runner:/tmp/coverage.xml ./coverage.xml 2>/dev/null || true
-                sed -i "s#/app/src#${WORKSPACE}/src#g" coverage.xml
                 docker rm -f test-runner 2>/dev/null || true
                 # Retourner le code de sortie des tests
                 exit $TEST_EXIT_CODE
@@ -103,7 +102,8 @@ pipeline {
                         -Dsonar.sources=src \
                         -Dsonar.python.version=3.11 \
                         -Dsonar.python.coverage.reportPaths=coverage.xml \
-                        -Dsonar.sourceEncoding=UTF-8
+                        -Dsonar.sourceEncoding=UTF-8 \
+                        -Dsonar.working.directory=$WORKSPACE/.scannerwork
                     '''
                 }
             }
