@@ -81,29 +81,29 @@ pipeline {
             }
         }
 
-        stage ('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             environment {
-                SONARQUBE_TOKEN = credentials ('sonar-token')
+                SONARQUBE_TOKEN = credentials('sonar-token')
             }
             steps {
-                withSonarQubeEnv ('sonarqube') {
+                withSonarQubeEnv('sonarqube') {
                     sh '''
-                        docker run --rm \
-                        --network cicd-network \
-                        --volumes-from jenkins \
-                        -w "$WORKSPACE" \
-                        -e SONAR_HOST_URL="$SONAR_HOST_URL" \
-                        -e SONAR_TOKEN="$SONARQUBE_TOKEN" \
-                        sonarsource/sonar-scanner-cli:latest \
-                        sonar-scanner \
-                        -Dsonar.projectKey=sentiment-ai \
-                        -Dsonar.projectName=SentimentAI \
-                        -Dsonar.projectBaseDir="$WORKSPACE" \
-                        -Dsonar.sources=src \
-                        -Dsonar.python.version=3.11 \
-                        -Dsonar.python.coverage.reportPaths=coverage.xml \
-                        -Dsonar.sourceEncoding=UTF-8 \
-                        -Dsonar.working.directory=$WORKSPACE/.scannerwork
+                    docker run --rm \
+                      --network cicd-network \
+                      --volumes-from jenkins \
+                      -w "$WORKSPACE" \
+                      -e SONAR_HOST_URL="$SONAR_HOST_URL" \
+                      -e SONAR_TOKEN="$SONARQUBE_TOKEN" \
+                      sonarsource/sonar-scanner-cli:latest \
+                      sonar-scanner \
+                      -Dsonar.projectKey=sentiment-ai \
+                      -Dsonar.projectName=SentimentAI \
+                      -Dsonar.projectBaseDir="$WORKSPACE" \
+                      -Dsonar.sources=src \
+                      -Dsonar.python.version=3.11 \
+                      -Dsonar.python.coverage.reportPaths=coverage.xml \
+                      -Dsonar.sourceEncoding=UTF-8 \
+                      -Dsonar.scanner.metadataFilePath=$WORKSPACE/report-task.txt
                     '''
                 }
             }
