@@ -177,6 +177,7 @@ pipeline {
             steps {
                 dir('infra') {
                     sh 'terraform init -input=false -migrate-state -force-copy -backend-config="path=/var/jenkins_home/terraform-state/sentiment-ai.tfstate"'
+                    sh 'docker rm -f sentiment-staging 2>/dev/null || true'
                     sh """
                     terraform apply -auto-approve \
                     -var='image_tag=${IMAGE_TAG}'
