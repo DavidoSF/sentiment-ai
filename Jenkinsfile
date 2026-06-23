@@ -172,7 +172,7 @@ pipeline {
         }
 
         stage('IaC Apply') {
-            when { branch 'main' }
+            when { expression { env.GIT_BRANCH == 'origin/main' } }
             steps {
                 dir('infra') {
                     sh 'terraform init -input=false'
@@ -186,7 +186,7 @@ pipeline {
 
         stage('Deploy Staging') {
             when {
-                branch 'main'
+                expression { env.GIT_BRANCH == 'origin/main' }
             }
 
             // steps {
