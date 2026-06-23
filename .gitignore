@@ -217,8 +217,7 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# Terraform -- ajouter dans . gitignore
+# Terraform
 **/.terraform/
 *.tfstate
 *.tfstate.backup
-.terraform.lock.hcl
