@@ -176,7 +176,7 @@ pipeline {
             when { expression { env.GIT_BRANCH == 'origin/main' } }
             steps {
                 dir('infra') {
-                    sh 'terraform init -input=false -migrate-state -backend-config="path=/var/jenkins_home/terraform-state/sentiment-ai.tfstate"'
+                    sh 'terraform init -input=false -migrate-state -force-copy -backend-config="path=/var/jenkins_home/terraform-state/sentiment-ai.tfstate"'
                     sh """
                     terraform apply -auto-approve \
                     -var='image_tag=${IMAGE_TAG}'
