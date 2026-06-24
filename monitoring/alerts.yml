@@ -1,0 +1,34 @@
+# monitoring/alerts.yml
+
+groups:
+  - name: sentimentai
+    rules:
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(
+            0.99,
+            rate(sentiment_prediction_duration_seconds_bucket[5m])
+          ) > 0.5
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Latence p99 élevée sur SentimentAI"
+
+      - alert: HighErrorRate
+        expr: |
+          rate(http_requests_total{status=~"5.."}[5m])
+          / rate(http_requests_total[5m]) * 100 > 5
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Taux d'erreurs 5xx > 5%"
+
+      - alert: LowConfidenceScore
+        expr: avg(sentiment_confidence_score) < 0.85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Modèle peu confiant - vérifier le drift"
