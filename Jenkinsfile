@@ -211,7 +211,7 @@ pipeline {
 
         stage('Smoke Test') {
             when {
-                branch 'main'
+                expression { env.GIT_BRANCH == 'origin/main' }
             }
 
             steps {
